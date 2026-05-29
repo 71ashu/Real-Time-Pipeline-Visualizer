@@ -3,16 +3,16 @@ import * as d3 from "d3";
 
 let packetCounter = 0;
 const NODES_DEF = [
-  { id: "source-1", name: "Kafka Stream", type: "source", x: 100, y: 220 },
-  { id: "source-2", name: "Event Bus", type: "source", x: 100, y: 420 },
-  { id: "transform-1", name: "Parser", type: "transform", x: 330, y: 150 },
-  { id: "transform-2", name: "Enricher", type: "transform", x: 330, y: 320 },
-  { id: "transform-3", name: "Validator", type: "transform", x: 330, y: 480 },
-  { id: "aggregate-1", name: "Aggregator", type: "aggregate", x: 560, y: 230 },
-  { id: "aggregate-2", name: "Joiner", type: "aggregate", x: 560, y: 400 },
-  { id: "sink-1", name: "PostgreSQL", type: "sink", x: 790, y: 160 },
-  { id: "sink-2", name: "Redis Cache", type: "sink", x: 790, y: 310 },
-  { id: "sink-3", name: "S3 Archive", type: "sink", x: 790, y: 460 },
+  { id: "source-1", name: "Kafka Stream", type: "source", x: 100, y: 120 },
+  { id: "source-2", name: "Event Bus", type: "source", x: 100, y: 320 },
+  { id: "transform-1", name: "Parser", type: "transform", x: 330, y: 50 },
+  { id: "transform-2", name: "Enricher", type: "transform", x: 330, y: 220 },
+  { id: "transform-3", name: "Validator", type: "transform", x: 330, y: 380 },
+  { id: "aggregate-1", name: "Aggregator", type: "aggregate", x: 560, y: 130 },
+  { id: "aggregate-2", name: "Joiner", type: "aggregate", x: 560, y: 300 },
+  { id: "sink-1", name: "PostgreSQL", type: "sink", x: 790, y: 60 },
+  { id: "sink-2", name: "Redis Cache", type: "sink", x: 790, y: 210 },
+  { id: "sink-3", name: "S3 Archive", type: "sink", x: 790, y: 360 },
 ];
 
 const EDGES_DEF = [
@@ -251,10 +251,10 @@ export default function PipelineVisualizer() {
 
   const nMap = nodeMap();
   const SVG_W = 920;
-  const SVG_H = 600;
+  const SVG_H = 470;
 
   return (
-    <div style={{ background: "#060810", minHeight: "100vh", fontFamily: "'Space Mono', monospace", color: "#ccd", overflow: "hidden", position: "relative" }}>
+    <div style={{ background: "#060810", minHeight: "100vh", width: "100%", fontFamily: "'Space Mono', monospace", color: "#ccd", overflowX: "hidden", position: "relative" }}>
       <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
       <div style={{ position: "relative", zIndex: 10, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 24px", borderBottom: "1px solid #ffffff0a", background: "rgba(6,8,16,0.9)" }}>
         <div style={{ fontSize: 13, fontWeight: 700, color: "#00d4aa", letterSpacing: 3, textTransform: "uppercase" }}>Pipeline Visualizer</div>
@@ -268,8 +268,8 @@ export default function PipelineVisualizer() {
         <MetricCard label="Active Nodes" value={state.nodes.filter((n) => n.status === "active").length} unit={`/ ${state.nodes.length}`} color="#8b5cf6" />
       </div>
 
-      <div style={{ position: "relative", zIndex: 10, padding: "16px 24px" }}>
-        <svg width={SVG_W} height={SVG_H} style={{ display: "block", borderRadius: 8, border: "1px solid #ffffff08", background: "rgba(4,6,12,0.7)" }}>
+      <div style={{ position: "relative", zIndex: 10, padding: "16px 24px", width: "100%", boxSizing: "border-box", display: "flex", justifyContent: "center", alignItems: "flex-start" }}>
+        <svg viewBox={`0 0 ${SVG_W} ${SVG_H}`} style={{ display: "block", width: "min(calc(100vw - 48px), 1300px)", height: "auto", borderRadius: 8, border: "1px solid #ffffff08", background: "rgba(4,6,12,0.7)" }}>
           {state.edges.map((edge) => {
             const src = nMap[edge.source];
             const tgt = nMap[edge.target];
