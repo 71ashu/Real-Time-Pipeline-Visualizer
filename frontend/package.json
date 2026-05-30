@@ -2,13 +2,15 @@
   "name": "pipeline-visualizer-frontend",
   "version": "1.0.0",
   "private": true,
-  "type": "module",
+  "type": "commonjs",
+  "main": "main.js",
   "scripts": {
     "start": "vite",
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview --host",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "electron": "electron ."
   },
   "dependencies": {
     "d3": "^7.9.0",
@@ -19,6 +21,7 @@
     "@types/react": "^18.3.23",
     "@types/react-dom": "^18.3.7",
     "@vitejs/plugin-react": "^4.7.0",
+    "electron": "^42.3.0",
     "eslint": "^9.37.0",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.24",
