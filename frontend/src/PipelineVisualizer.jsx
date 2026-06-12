@@ -91,13 +91,46 @@ function simulatePipeline() {
 const NODE_W = 120;
 const NODE_H = 44;
 const TYPE_COLORS = {
-  source: { base: "#00d4aa", glow: "#00d4aa44", border: "#00ffc8" },
-  transform: { base: "#f59e0b", glow: "#f59e0b44", border: "#fbbf24" },
-  aggregate: { base: "#8b5cf6", glow: "#8b5cf644", border: "#a78bfa" },
-  sink: { base: "#06b6d4", glow: "#06b6d444", border: "#67e8f9" },
+  source: { base: "#00d4aa", glow: "#00d4aa44", border: "#00ffc8", darkText: "#007a61", darkBorder: "#00a882" },
+  transform: { base: "#f59e0b", glow: "#f59e0b44", border: "#fbbf24", darkText: "#92400e", darkBorder: "#b45309" },
+  aggregate: { base: "#8b5cf6", glow: "#8b5cf644", border: "#a78bfa", darkText: "#4c1d95", darkBorder: "#6d28d9" },
+  sink: { base: "#06b6d4", glow: "#06b6d444", border: "#67e8f9", darkText: "#164e63", darkBorder: "#0891b2" },
 };
 const STATUS_BADGE = { active: "#00d4aa", warning: "#f59e0b", error: "#ef4444" };
 const PACKET_COLORS = { data: "#00d4aa", error: "#ef4444", control: "#8b5cf6" };
+
+const THEMES = {
+  dark: {
+    bg: "#060810",
+    headerBg: "rgba(6,8,16,0.9)",
+    headerBorder: "#ffffff0a",
+    metricsBorder: "#ffffff05",
+    cardBg: "rgba(10,12,20,0.85)",
+    svgBg: "rgba(4,6,12,0.7)",
+    svgBorder: "#ffffff08",
+    text: "#ccd",
+    labelColor: "#556",
+    titleColor: "#00d4aa",
+    toggleBg: "#1a1f2e",
+    toggleBorder: "#ffffff1a",
+    toggleColor: "#ccd",
+  },
+  light: {
+    bg: "#ffffff",
+    headerBg: "rgba(255,255,255,0.95)",
+    headerBorder: "#00000010",
+    metricsBorder: "#00000008",
+    cardBg: "rgba(255,255,255,0.9)",
+    svgBg: "rgba(250,250,252,0.9)",
+    svgBorder: "#00000010",
+    text: "#1a1d2e",
+    labelColor: "#888",
+    titleColor: "#008f72",
+    toggleBg: "#f0f0f0",
+    toggleBorder: "#00000018",
+    toggleColor: "#1a1d2e",
+  },
+};
 
 function getEdgePoints(src, tgt) {
   const sx = src.x + NODE_W / 2;
@@ -143,11 +176,11 @@ function Sparkline({ data, color, width = 80, height = 24 }) {
   return <svg ref={ref} width={width} height={height} style={{ display: "block" }} />;
 }
 
-function MetricCard({ label, value, unit, color, sparkData }) {
+function MetricCard({ label, value, unit, color, sparkData, theme }) {
   return (
     <div
       style={{
-        background: "rgba(10,12,20,0.85)",
+        background: theme.cardBg,
         border: `1px solid ${color}33`,
         borderRadius: 6,
         padding: "10px 14px",
@@ -155,10 +188,10 @@ function MetricCard({ label, value, unit, color, sparkData }) {
         boxShadow: `0 0 12px ${color}22`,
       }}
     >
-      <div style={{ color: "#556", fontSize: 10, letterSpacing: 2, textTransform: "uppercase", fontFamily: "'Space Mono', monospace", marginBottom: 4 }}>{label}</div>
+      <div style={{ color: theme.labelColor, fontSize: 10, letterSpacing: 2, textTransform: "uppercase", fontFamily: "'Space Mono', monospace", marginBottom: 4 }}>{label}</div>
       <div style={{ color, fontSize: 22, fontFamily: "'Space Mono', monospace", fontWeight: 700, lineHeight: 1 }}>
         {typeof value === "number" ? value.toFixed(0) : value}
-        <span style={{ fontSize: 11, color: "#556", marginLeft: 4 }}>{unit}</span>
+        <span style={{ fontSize: 11, color: theme.labelColor, marginLeft: 4 }}>{unit}</span>
       </div>
       {sparkData && <Sparkline data={sparkData} color={color} />}
     </div>
@@ -183,7 +216,9 @@ export default function PipelineVisualizer() {
   const [history, setHistory] = useState({ throughput: [], errors: [] });
   const [connected, setConnected] = useState(false);
   const [useWS, setUseWS] = useState(false);
+  const [darkMode, setDarkMode] = useState(true);
   const animRef = useRef(null);
+  const theme = THEMES[darkMode ? "dark" : "light"];
 
   useEffect(() => {
     fetch(apiTarget("/api/state"))
@@ -254,22 +289,41 @@ export default function PipelineVisualizer() {
   const SVG_H = 470;
 
   return (
-    <div style={{ background: "#060810", minHeight: "100vh", width: "100%", fontFamily: "'Space Mono', monospace", color: "#ccd", overflowX: "hidden", position: "relative" }}>
+    <div style={{ background: theme.bg, minHeight: "100vh", width: "100%", fontFamily: "'Space Mono', monospace", color: theme.text, overflowX: "hidden", position: "relative", transition: "background 0.3s, color 0.3s" }}>
       <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
-      <div style={{ position: "relative", zIndex: 10, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 24px", borderBottom: "1px solid #ffffff0a", background: "rgba(6,8,16,0.9)" }}>
-        <div style={{ fontSize: 13, fontWeight: 700, color: "#00d4aa", letterSpacing: 3, textTransform: "uppercase" }}>Pipeline Visualizer</div>
-        <div style={{ fontSize: 10, color: connected ? "#00d4aa" : "#f59e0b", letterSpacing: 2 }}>{connected ? "WS LIVE" : "SIMULATED"}</div>
+      <div style={{ position: "relative", zIndex: 10, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 24px", borderBottom: `1px solid ${theme.headerBorder}`, background: theme.headerBg }}>
+        <div style={{ fontSize: 13, fontWeight: 700, color: theme.titleColor, letterSpacing: 3, textTransform: "uppercase" }}>Pipeline Visualizer</div>
+        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+          <div style={{ fontSize: 10, color: connected ? "#00d4aa" : "#f59e0b", letterSpacing: 2 }}>{connected ? "WS LIVE" : "SIMULATED"}</div>
+          <button
+            onClick={() => setDarkMode((d) => !d)}
+            style={{
+              background: theme.toggleBg,
+              border: `1px solid ${theme.toggleBorder}`,
+              borderRadius: 20,
+              padding: "4px 12px",
+              cursor: "pointer",
+              fontSize: 11,
+              color: theme.toggleColor,
+              fontFamily: "'Space Mono', monospace",
+              letterSpacing: 1,
+              transition: "background 0.2s, color 0.2s",
+            }}
+          >
+            {darkMode ? "☀ LIGHT" : "☾ DARK"}
+          </button>
+        </div>
       </div>
 
-      <div style={{ position: "relative", zIndex: 10, display: "flex", gap: 12, padding: "12px 24px", overflowX: "auto", borderBottom: "1px solid #ffffff05" }}>
-        <MetricCard label="Total Flow" value={state.totalFlow} unit="msg/s" color="#00d4aa" sparkData={history.throughput} />
-        <MetricCard label="Avg Throughput" value={state.throughput} unit="msg/s" color="#f59e0b" sparkData={history.throughput} />
-        <MetricCard label="Total Errors" value={state.errors} unit="" color="#ef4444" sparkData={history.errors} />
-        <MetricCard label="Active Nodes" value={state.nodes.filter((n) => n.status === "active").length} unit={`/ ${state.nodes.length}`} color="#8b5cf6" />
+      <div style={{ position: "relative", zIndex: 10, display: "flex", gap: 12, padding: "12px 24px", overflowX: "auto", borderBottom: `1px solid ${theme.metricsBorder}` }}>
+        <MetricCard label="Total Flow" value={state.totalFlow} unit="msg/s" color="#00d4aa" sparkData={history.throughput} theme={theme} />
+        <MetricCard label="Avg Throughput" value={state.throughput} unit="msg/s" color="#f59e0b" sparkData={history.throughput} theme={theme} />
+        <MetricCard label="Total Errors" value={state.errors} unit="" color="#ef4444" sparkData={history.errors} theme={theme} />
+        <MetricCard label="Active Nodes" value={state.nodes.filter((n) => n.status === "active").length} unit={`/ ${state.nodes.length}`} color="#8b5cf6" theme={theme} />
       </div>
 
       <div style={{ position: "relative", zIndex: 10, padding: "16px 24px", width: "100%", boxSizing: "border-box", display: "flex", justifyContent: "center", alignItems: "flex-start" }}>
-        <svg viewBox={`0 0 ${SVG_W} ${SVG_H}`} style={{ display: "block", width: "min(calc(100vw - 48px), 1300px)", height: "auto", borderRadius: 8, border: "1px solid #ffffff08", background: "rgba(4,6,12,0.7)" }}>
+        <svg viewBox={`0 0 ${SVG_W} ${SVG_H}`} style={{ display: "block", width: "min(calc(100vw - 48px), 1300px)", height: "auto", borderRadius: 8, border: `1px solid ${theme.svgBorder}`, background: theme.svgBg, transition: "background 0.3s" }}>
           {state.edges.map((edge) => {
             const src = nMap[edge.source];
             const tgt = nMap[edge.target];
@@ -295,12 +349,12 @@ export default function PipelineVisualizer() {
             const statusColor = STATUS_BADGE[node.status] ?? "#00d4aa";
             return (
               <g key={node.id}>
-                <rect x={node.x} y={node.y} width={NODE_W} height={NODE_H} rx={5} fill={c.base} fillOpacity={0.1} stroke={c.border} strokeWidth={1} strokeOpacity={0.5} />
+                <rect x={node.x} y={node.y} width={NODE_W} height={NODE_H} rx={5} fill={c.base} fillOpacity={darkMode ? 0.1 : 0.22} stroke={darkMode ? c.border : c.darkBorder} strokeWidth={1} strokeOpacity={darkMode ? 0.5 : 0.9} />
                 <circle cx={node.x + NODE_W - 10} cy={node.y + 10} r={4} fill={statusColor} />
-                <text x={node.x + 10} y={node.y + 17} style={{ fill: c.border, fontSize: 11, fontWeight: 700, fontFamily: "'Space Mono', monospace" }}>
+                <text x={node.x + 10} y={node.y + 17} style={{ fill: darkMode ? c.border : c.darkText, fontSize: 11, fontWeight: 700, fontFamily: "'Space Mono', monospace" }}>
                   {node.name}
                 </text>
-                <text x={node.x + 10} y={node.y + 31} style={{ fill: c.base, fontSize: 9, fontFamily: "'Space Mono', monospace", opacity: 0.8 }}>
+                <text x={node.x + 10} y={node.y + 31} style={{ fill: darkMode ? c.base : c.darkBorder, fontSize: 9, fontFamily: "'Space Mono', monospace", opacity: 0.8 }}>
                   {(node.throughput ?? 0).toFixed(0)} msg/s
                 </text>
               </g>
