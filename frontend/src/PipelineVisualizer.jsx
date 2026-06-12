@@ -3,16 +3,16 @@ import * as d3 from "d3";
 
 let packetCounter = 0;
 const NODES_DEF = [
-  { id: "source-1", name: "Kafka Stream", type: "source", x: 100, y: 120 },
-  { id: "source-2", name: "Event Bus", type: "source", x: 100, y: 320 },
-  { id: "transform-1", name: "Parser", type: "transform", x: 330, y: 50 },
-  { id: "transform-2", name: "Enricher", type: "transform", x: 330, y: 220 },
-  { id: "transform-3", name: "Validator", type: "transform", x: 330, y: 380 },
-  { id: "aggregate-1", name: "Aggregator", type: "aggregate", x: 560, y: 130 },
-  { id: "aggregate-2", name: "Joiner", type: "aggregate", x: 560, y: 300 },
-  { id: "sink-1", name: "PostgreSQL", type: "sink", x: 790, y: 60 },
-  { id: "sink-2", name: "Redis Cache", type: "sink", x: 790, y: 210 },
-  { id: "sink-3", name: "S3 Archive", type: "sink", x: 790, y: 360 },
+  { id: "source-1", name: "Kafka Stream", type: "source", x: 80, y: 70 },
+  { id: "source-2", name: "Event Bus", type: "source", x: 80, y: 270 },
+  { id: "transform-1", name: "Parser", type: "transform", x: 300, y: 20 },
+  { id: "transform-2", name: "Enricher", type: "transform", x: 300, y: 170 },
+  { id: "transform-3", name: "Validator", type: "transform", x: 300, y: 320 },
+  { id: "aggregate-1", name: "Aggregator", type: "aggregate", x: 520, y: 90 },
+  { id: "aggregate-2", name: "Joiner", type: "aggregate", x: 520, y: 250 },
+  { id: "sink-1", name: "PostgreSQL", type: "sink", x: 740, y: 20 },
+  { id: "sink-2", name: "Redis Cache", type: "sink", x: 740, y: 170 },
+  { id: "sink-3", name: "S3 Archive", type: "sink", x: 740, y: 320 },
 ];
 
 const EDGES_DEF = [
@@ -286,7 +286,7 @@ export default function PipelineVisualizer() {
 
   const nMap = nodeMap();
   const SVG_W = 920;
-  const SVG_H = 470;
+  const SVG_H = 500;
 
   return (
     <div style={{ background: theme.bg, minHeight: "100vh", width: "100%", fontFamily: "'Space Mono', monospace", color: theme.text, overflowX: "hidden", position: "relative", transition: "background 0.3s, color 0.3s" }}>

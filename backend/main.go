@@ -120,16 +120,16 @@ func (s *StateStore) Get() PipelineState {
 }
 
 var nodes = []PipelineNode{
-	{ID: "source-1", Name: "Kafka Stream", Type: "source", X: 80, Y: 200, Status: "active"},
-	{ID: "source-2", Name: "Event Bus", Type: "source", X: 80, Y: 400, Status: "active"},
-	{ID: "transform-1", Name: "Parser", Type: "transform", X: 300, Y: 150, Status: "active"},
-	{ID: "transform-2", Name: "Enricher", Type: "transform", X: 300, Y: 300, Status: "active"},
-	{ID: "transform-3", Name: "Validator", Type: "transform", X: 300, Y: 450, Status: "active"},
-	{ID: "aggregate-1", Name: "Aggregator", Type: "aggregate", X: 520, Y: 220, Status: "active"},
-	{ID: "aggregate-2", Name: "Joiner", Type: "aggregate", X: 520, Y: 380, Status: "active"},
-	{ID: "sink-1", Name: "PostgreSQL", Type: "sink", X: 740, Y: 150, Status: "active"},
-	{ID: "sink-2", Name: "Redis Cache", Type: "sink", X: 740, Y: 300, Status: "active"},
-	{ID: "sink-3", Name: "S3 Archive", Type: "sink", X: 740, Y: 450, Status: "active"},
+	{ID: "source-1", Name: "Kafka Stream", Type: "source", X: 80, Y: 70, Status: "active"},
+	{ID: "source-2", Name: "Event Bus", Type: "source", X: 80, Y: 270, Status: "active"},
+	{ID: "transform-1", Name: "Parser", Type: "transform", X: 300, Y: 20, Status: "active"},
+	{ID: "transform-2", Name: "Enricher", Type: "transform", X: 300, Y: 170, Status: "active"},
+	{ID: "transform-3", Name: "Validator", Type: "transform", X: 300, Y: 320, Status: "active"},
+	{ID: "aggregate-1", Name: "Aggregator", Type: "aggregate", X: 520, Y: 90, Status: "active"},
+	{ID: "aggregate-2", Name: "Joiner", Type: "aggregate", X: 520, Y: 250, Status: "active"},
+	{ID: "sink-1", Name: "PostgreSQL", Type: "sink", X: 740, Y: 20, Status: "active"},
+	{ID: "sink-2", Name: "Redis Cache", Type: "sink", X: 740, Y: 170, Status: "active"},
+	{ID: "sink-3", Name: "S3 Archive", Type: "sink", X: 740, Y: 320, Status: "active"},
 }
 
 var edges = []PipelineEdge{
